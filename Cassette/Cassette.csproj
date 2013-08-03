@@ -125,6 +125,8 @@
     <BundleResource Include="Resources\menu%402x.png" />
     <BundleResource Include="Resources\menu.png" />
     <BundleResource Include="Resources\Icon.png" />
+    <BundleResource Include="Resources\player.png" />
+    <BundleResource Include="Resources\player%402x.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xamarin.Juice\Xamarin.Juice.csproj">
