@@ -13,63 +13,64 @@ namespace Cassette
 	public class ContentController : UIViewController
 	{
 		readonly CoverCollectionView CoverCollection;
+		
+		BigCoverView BigCoverView;
+		UIView CoverCollectionSelectedView;
 
-		UIView OriginalView;
-		RectangleF OriginalFrame;
-		BigCoverView CoverView;
-		UIImageView ControlView;
+		PlayerViewController PlayerViewController;
 
 		public ContentController (RectangleF frame)
 		{
 			View = new UIView (frame);
 
-			CoverView = new BigCoverView ();
-			ControlView = new UIImageView (UIImage.FromFile ("player.png"));
+			PlayerViewController = new PlayerViewController (frame);
+			PlayerViewController.Dismissed += () => {
+				PlayerViewController.DismissViewController (false, () => {
+					TransitionFromBigCoverBackToCoverCollection ();
+				});
+			};
+
+			BigCoverView = new BigCoverView ();
 			View.AddSubview (CoverCollection = new CoverCollectionView (frame));
 
 			CoverCollection.CoverTapped += CoverCollectionCoverTapped;
-			CoverView.Tapped += _ => TransitionFromBigCoverBackToCoverCollection ();
 		}
 
 		void TransitionFromBigCoverBackToCoverCollection ()
 		{
-			UIView.Animate (0.1, () => {
-				ControlView.Alpha = 0;
-			}, () => {
-				ControlView.RemoveFromSuperview ();
-			});
-
 			UIView.Animate (0.2, 0.1, UIViewAnimationOptions.CurveEaseOut, () => {
-				CoverView.Frame = OriginalFrame;
+				BigCoverView.Frame = CoverCollectionSelectedViewFrame;
 				CoverCollection.Alpha = 1;
 			}, () => {
-				CoverView.RemoveFromSuperview ();
-				OriginalView.Alpha = 1;
+				BigCoverView.RemoveFromSuperview ();
+				CoverCollectionSelectedView.Alpha = 1;
 			});
+		}
+
+		RectangleF CoverCollectionSelectedViewFrame {
+			get {
+				return CoverCollection.ConvertRectToView (CoverCollectionSelectedView.Frame, View);
+			}
 		}
 
 		void CoverCollectionCoverTapped (Cover cover, UIView view)
 		{
-			OriginalView = view;
-			OriginalFrame = CoverCollection.ConvertRectToView (view.Frame, View);
+			CoverCollectionSelectedView = view;
+			BigCoverView.Frame = CoverCollectionSelectedViewFrame;
+			BigCoverView.Image = cover.CoverImage;
 
-			CoverView.Frame = OriginalFrame;
-			CoverView.Image = cover.CoverImage;
-		
-			View.AddSubview (CoverView);
+			PlayerViewController.Cover = cover;
 
-			OriginalView.Alpha = 0;
+			View.AddSubview (BigCoverView);
+
+			CoverCollectionSelectedView.Alpha = 0;
 
 			UIView.Animate (0.2, () => {
 				CoverCollection.Alpha = 0;
-				CoverView.Frame = new RectangleF (0, 0, View.Frame.Width, View.Frame.Width);
+				BigCoverView.Frame = new RectangleF (0, 0, View.Frame.Width, View.Frame.Width);
+			}, () => {
+				PresentViewController (PlayerViewController, false, delegate {});
 			});
-
-			ControlView.Alpha = 0;
-			View.AddSubview (ControlView);
-			UIView.Animate (0.1, 0.25, UIViewAnimationOptions.CurveLinear, () => {
-				ControlView.Alpha = 1;
-			}, () => {});
 		}
 	}
 	

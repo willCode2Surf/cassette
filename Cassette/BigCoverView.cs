@@ -22,6 +22,11 @@ namespace Cassette
 				new UITapGestureRecognizer (() => Tapped (this))
 			);
 		}
+
+		public BigCoverView (RectangleF frame) : this ()
+		{
+			Frame = frame;
+		}
 	}
 	
 }
