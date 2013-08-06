@@ -12,11 +12,7 @@ namespace Cassette
 {
 	public class ContentController : UIViewController
 	{
-		readonly CoverCollectionView CoverCollection;
-		
-		BigCoverView BigCoverView;
-		UIView CoverCollectionSelectedView;
-
+		CoverCollectionView CoverCollection;
 		PlayerViewController PlayerViewController;
 
 		public ContentController (RectangleF frame)
@@ -25,52 +21,21 @@ namespace Cassette
 
 			PlayerViewController = new PlayerViewController (frame);
 			PlayerViewController.Dismissed += () => {
-				PlayerViewController.DismissViewController (false, () => {
-					TransitionFromBigCoverBackToCoverCollection ();
-				});
+				PlayerViewController.DismissViewController (false, delegate{});
 			};
 
-			BigCoverView = new BigCoverView ();
-			View.AddSubview (CoverCollection = new CoverCollectionView (frame));
-
+			CoverCollection = new CoverCollectionView (frame);
 			CoverCollection.CoverTapped += CoverCollectionCoverTapped;
-		}
 
-		void TransitionFromBigCoverBackToCoverCollection ()
-		{
-			UIView.Animate (0.2, 0.1, UIViewAnimationOptions.CurveEaseOut, () => {
-				BigCoverView.Frame = CoverCollectionSelectedViewFrame;
-				CoverCollection.Alpha = 1;
-			}, () => {
-				BigCoverView.RemoveFromSuperview ();
-				CoverCollectionSelectedView.Alpha = 1;
-			});
-		}
-
-		RectangleF CoverCollectionSelectedViewFrame {
-			get {
-				return CoverCollection.ConvertRectToView (CoverCollectionSelectedView.Frame, View);
-			}
+			View.AddSubview (CoverCollection);
 		}
 
 		void CoverCollectionCoverTapped (Cover cover, UIView view)
 		{
-			CoverCollectionSelectedView = view;
-			BigCoverView.Frame = CoverCollectionSelectedViewFrame;
-			BigCoverView.Image = cover.CoverImage;
-
-			PlayerViewController.Cover = cover;
-
-			View.AddSubview (BigCoverView);
-
-			CoverCollectionSelectedView.Alpha = 0;
-
-			UIView.Animate (0.2, () => {
-				CoverCollection.Alpha = 0;
-				BigCoverView.Frame = new RectangleF (0, 0, View.Frame.Width, View.Frame.Width);
-			}, () => {
-				PresentViewController (PlayerViewController, false, delegate {});
-			});
+			var coverOrigin = CoverCollection.ConvertRectToView (view.Frame, View);
+			var screen = View.GetImageRepresentation ();
+			PlayerViewController.PrepareTransition (cover, coverOrigin, screen);
+			PresentViewController (PlayerViewController, false, delegate {});
 		}
 	}
 	

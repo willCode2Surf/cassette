@@ -134,5 +134,9 @@
       <Project>{90E58DA6-EBF9-4259-8694-45D9FF594E3B}</Project>
       <Name>Xamarin.Juice</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Xamarin.Juice.iOS\Xamarin.Juice.iOS.csproj">
+      <Project>{1BEAD16E-A2E6-4E4F-805D-1F73CE2C1D0D}</Project>
+      <Name>Xamarin.Juice.iOS</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
