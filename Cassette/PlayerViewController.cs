@@ -16,8 +16,11 @@ namespace Cassette
 		RectangleF CoverOrigin, CoverDestination;
 		UIImageView ControlView;
 		UIView BackgroundView;
+		UIButton playButton;
 
 		public event Action Dismissed = delegate {};
+
+		List<string> Tracks;
 
 		public PlayerViewController (RectangleF frame)
 		{
@@ -29,12 +32,27 @@ namespace Cassette
 			CoverView = new BigCoverView (CoverDestination);
 			CoverView.Tapped += _ => Dismiss ();
 
-			ControlView = new UIImageView (UIImage.FromFile ("player.png"));
+			ControlView = new UIImageView (UIImage.FromFile ("player.png"));    
+
+			playButton = UIButton.FromType(UIButtonType.RoundedRect);
+			playButton.SetImage(UIImage.FromFile ("icon.png"), UIControlState.Normal);
+
+			playButton.Frame = new RectangleF(0, frame.Width, 50, 50);;
+			playButton.SetTitle("Login to Rdio", UIControlState.Normal);
+
+			playButton.SetTitleColor(UIColor.Black, UIControlState.Normal);
+			playButton.TouchUpInside += (sender, e) => 
+			{
+				if (Tracks.Count > 0)
+					RdioHelper.Instance.PlaySource(Tracks[0]);
+			};
+
 
 			View.AddSubviews (
 				BackgroundView,
 				CoverView,
-				ControlView
+				ControlView,
+				playButton
 			);
 		}
 
@@ -42,6 +60,7 @@ namespace Cassette
 		{
 			CoverView.Image = cover.CoverImage;
 			CoverOrigin = coverOrigin;
+			Tracks = cover.Tracks;
 			BackgroundView.BackgroundColor = UIColor.FromPatternImage (previousScreen);
 		}
 

@@ -23,7 +23,11 @@ namespace Cassette
 			}
 		}
 
-		public Cover (string imagePath, bool fromUrl)
+		public string Artist { get; private set; }
+
+		public List<string> Tracks { get; private set; }
+
+		public Cover (string imagePath, bool fromUrl, string artist, List<string> tracks)
 		{
 			ImagePath = imagePath;
 			if (fromUrl) {
@@ -31,6 +35,10 @@ namespace Cassette
 			} else {
 				CoverImageLazy = new Lazy<UIImage> (() => UIImage.FromFile (ImagePath));
 			}
+
+			Artist = artist;
+			Tracks = tracks;
+
 		}
 
 	 	UIImage FromUrl (string uri)

@@ -45,11 +45,24 @@ namespace Cassette
 				var covers = new List<Cover>();
 				var results = o as NSMutableArray;
 
-				for (uint i = 0; i < results.Count; i++)
-				{
-					using (var album = new NSDictionary(results.ValueAt (i)))
-					{
-						covers.Add (new Cover(album.ObjectForKey(new NSString ("icon")).ToString (),true));
+				if (results != null) {
+					for (uint i = 0; i < results.Count; i++) {
+						using (var album = new NSDictionary(results.ValueAt (i))) {
+
+							string artist = album.ObjectForKey(new NSString ("artist")).ToString ();
+							string icon = album.ObjectForKey(new NSString ("icon")).ToString ();
+							var tracks = new List<string>();
+							var tracksArray = album.ObjectForKey(new NSString("trackKeys")) as NSMutableArray;
+							if (tracksArray != null)
+							{
+								foreach (var track in NSArray.FromArray <NSString> (tracksArray)) {
+									tracks.Add(track);
+								}
+							}
+
+							var cover = new Cover(icon,true, artist, tracks);
+							covers.Add (cover);
+						}
 					}
 				}
 
