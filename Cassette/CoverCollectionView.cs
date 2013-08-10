@@ -7,6 +7,7 @@ using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
 using Xamarin.Juice;
+using RdioSdk.iOS;
 
 namespace Cassette
 {	
@@ -20,7 +21,7 @@ namespace Cassette
 		{
 			RegisterClassForCell (typeof(CoverCell), CoverCellId);
 
-			DataSource = new CoverDataSource ();
+			//DataSource = new CoverDataSource ();
 			var @delegate = new CoverLayoutDelegate ();
 			Delegate = @delegate;
 
@@ -82,15 +83,21 @@ namespace Cassette
 			}
 		}
 
-		class CoverDataSource : UICollectionViewDataSource
+		public class CoverDataSource : UICollectionViewDataSource
 		{
 			const int TotalCovers = 12;
 
-			List<Cover> Covers =
-				Enumerable
-					.Range (0, TotalCovers)
-					.Select (i => new Cover (string.Format ("covers/{0}.png", i)))
-					.ToList ();
+			//List<Cover> Covers =
+			//	Enumerable
+			//		.Range (0, TotalCovers)
+			//		.Select (i => new Cover (string.Format ("covers/{0}.png", i)))
+			//		.ToList ();
+			public List<Cover> Covers { get; private set; }
+
+			public CoverDataSource(List<Cover> covers)
+			{
+				Covers = covers;
+			}
 
 			public override int GetItemsCount (UICollectionView collectionView, int section)
 			{

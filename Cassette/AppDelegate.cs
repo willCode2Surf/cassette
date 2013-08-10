@@ -21,6 +21,8 @@ namespace Cassette
 				}
 			};
 			window.MakeKeyAndVisible ();
+
+			this.window.RootViewController.PresentViewController (new LoginScreenController (), false, () => {});
 			
 			return true;
 		}

@@ -95,9 +95,11 @@
     <Compile Include="AddShadowView.cs" />
     <Compile Include="Cover.cs" />
     <Compile Include="ContentController.cs" />
-    <Compile Include="TopLevelController.cs" />
     <Compile Include="BigCoverView.cs" />
     <Compile Include="PlayerViewController.cs" />
+    <Compile Include="RdioHelper.cs" />
+    <Compile Include="LoginScreenController.cs" />
+    <Compile Include="TopLevelController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -128,6 +130,8 @@
     <BundleResource Include="Resources\Icon.png" />
     <BundleResource Include="Resources\player.png" />
     <BundleResource Include="Resources\player%402x.png" />
+    <BundleResource Include="Resources\Default.png" />
+    <BundleResource Include="Resources\Default%402x.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xamarin.Juice\Xamarin.Juice.csproj">
@@ -137,6 +141,10 @@
     <ProjectReference Include="..\Xamarin.Juice.iOS\Xamarin.Juice.iOS.csproj">
       <Project>{1BEAD16E-A2E6-4E4F-805D-1F73CE2C1D0D}</Project>
       <Name>Xamarin.Juice.iOS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RdioSdk.iOS\RdioSdk.iOS.csproj">
+      <Project>{63C4C16A-8952-4F57-9DAA-1ED94FB44DDE}</Project>
+      <Name>RdioSdk.iOS</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

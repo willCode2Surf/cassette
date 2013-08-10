@@ -28,6 +28,13 @@ namespace Cassette
 			CoverCollection.CoverTapped += CoverCollectionCoverTapped;
 
 			View.AddSubview (CoverCollection);
+
+			RdioHelper.AuthorizeRequestCompleted += (RdioHelper.AuthorizeState state) => {
+				if (state == RdioHelper.AuthorizeState.Authorized) {
+					RdioHelper.GetHeavyRotationCoversCompleted += HandleGetHeavyRotationCoversCompleted;
+					RdioHelper.Instance.GetHeavyRotationCovers ();
+				}
+			};
 		}
 
 		void CoverCollectionCoverTapped (Cover cover, UIView view)
@@ -36,6 +43,12 @@ namespace Cassette
 			var screen = View.GetImageRepresentation ();
 			PlayerViewController.PrepareTransition (cover, coverOrigin, screen);
 			PresentViewController (PlayerViewController, false, delegate {});
+		}
+
+		void HandleGetHeavyRotationCoversCompleted (List<Cover> covers)
+		{
+			RdioHelper.GetHeavyRotationCoversCompleted -= HandleGetHeavyRotationCoversCompleted;
+			CoverCollection.DataSource = new CoverCollectionView.CoverDataSource (covers);
 		}
 	}
 	

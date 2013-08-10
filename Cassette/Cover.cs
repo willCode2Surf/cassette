@@ -22,10 +22,22 @@ namespace Cassette
 				return CoverImageLazy.Value;
 			}
 		}
-		public Cover (string imagePath)
+
+		public Cover (string imagePath, bool fromUrl)
 		{
 			ImagePath = imagePath;
-			CoverImageLazy = new Lazy<UIImage> (() => UIImage.FromFile (ImagePath));
+			if (fromUrl) {
+				CoverImageLazy = new Lazy<UIImage> (() => FromUrl (ImagePath));
+			} else {
+				CoverImageLazy = new Lazy<UIImage> (() => UIImage.FromFile (ImagePath));
+			}
+		}
+
+	 	UIImage FromUrl (string uri)
+		{
+			using (var url = new NSUrl (uri))
+				using (var data = NSData.FromUrl (url))
+					return UIImage.LoadFromData (data);
 		}
 	}
 	
