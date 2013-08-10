@@ -50,7 +50,7 @@ namespace Cassette
 						using (var album = new NSDictionary(results.ValueAt (i))) {
 
 							string artist = album.ObjectForKey(new NSString ("artist")).ToString ();
-							string icon = album.ObjectForKey(new NSString ("icon")).ToString ();
+							string bigIcon = album.ObjectForKey(new NSString ("bigIcon")).ToString ();
 							var tracks = new List<string>();
 							var tracksArray = album.ObjectForKey(new NSString("trackKeys")) as NSMutableArray;
 							if (tracksArray != null)
@@ -60,7 +60,7 @@ namespace Cassette
 								}
 							}
 
-							var cover = new Cover(icon,true, artist, tracks);
+							var cover = new Cover(bigIcon, true, artist, tracks);
 							covers.Add (cover);
 						}
 					}
@@ -111,7 +111,8 @@ namespace Cassette
 				NSObject.FromObject("false"),
 				NSObject.FromObject("12"),
 				NSObject.FromObject("1"),
-				NSObject.FromObject("12")
+				NSObject.FromObject("12"),
+				NSObject.FromObject("bigIcon")
 			};
 
 			var keys = new NSObject[]
@@ -121,7 +122,8 @@ namespace Cassette
 				NSObject.FromObject("friends"),
 				NSObject.FromObject("limit"),
 				NSObject.FromObject("start"),
-				NSObject.FromObject("count")
+				NSObject.FromObject("count"),
+				NSObject.FromObject("extras")
 			};
 
 			var args = NSDictionary.FromObjectsAndKeys (values, keys);

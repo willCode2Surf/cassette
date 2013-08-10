@@ -35,10 +35,9 @@ namespace Cassette
 			ControlView = new UIImageView (UIImage.FromFile ("player.png"));    
 
 			playButton = UIButton.FromType(UIButtonType.RoundedRect);
-			playButton.SetImage(UIImage.FromFile ("icon.png"), UIControlState.Normal);
+			playButton.SetTitle("Play", UIControlState.Normal);
 
-			playButton.Frame = new RectangleF(0, frame.Width, 50, 50);;
-			playButton.SetTitle("Login to Rdio", UIControlState.Normal);
+			playButton.Frame = new RectangleF(0, frame.Width, 60, 40);;
 
 			playButton.SetTitleColor(UIColor.Black, UIControlState.Normal);
 			playButton.TouchUpInside += (sender, e) => 
