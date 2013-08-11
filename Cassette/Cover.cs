@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Drawing;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
@@ -13,13 +14,17 @@ namespace Cassette
 
 	public class Cover
 	{
-		public readonly string ImagePath;
+		public readonly string ImageUrl;
 
-		Lazy<UIImage> CoverImageLazy;
+		UIImage _coverImage;
 
+		/// <summary>
+		/// Gets the cover image. This blocks if the image isn't downloaded yet; please use GetCoverImageAsync.
+		/// </summary>
+		/// <value>The cover image.</value>
 		public UIImage CoverImage {
 			get {
-				return CoverImageLazy.Value;
+				return _coverImage = _coverImage ?? FromUrl (ImageUrl);
 			}
 		}
 
@@ -27,18 +32,16 @@ namespace Cassette
 
 		public List<string> Tracks { get; private set; }
 
-		public Cover (string imagePath, bool fromUrl, string artist, List<string> tracks)
+		public Cover (string imageUrl, string artist, List<string> tracks)
 		{
-			ImagePath = imagePath;
-			if (fromUrl) {
-				CoverImageLazy = new Lazy<UIImage> (() => FromUrl (ImagePath));
-			} else {
-				CoverImageLazy = new Lazy<UIImage> (() => UIImage.FromFile (ImagePath));
-			}
-
+			ImageUrl = imageUrl;
 			Artist = artist;
 			Tracks = tracks;
+		}
 
+		public Task<UIImage> GetCoverImageAsync ()
+		{
+			return Task.Factory.StartNew (() => CoverImage);
 		}
 
 	 	UIImage FromUrl (string uri)

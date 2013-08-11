@@ -60,7 +60,7 @@ namespace Cassette
 								}
 							}
 
-							var cover = new Cover(bigIcon, true, artist, tracks);
+							var cover = new Cover (bigIcon, artist, tracks);
 							covers.Add (cover);
 						}
 					}

@@ -31,7 +31,8 @@ namespace Cassette
 		class CoverCell : UICollectionViewCell
 		{
 			Cover cover;
-			readonly UIImageView ImageView;
+			UIImageView ImageView;
+			UIActivityIndicatorView ActivityIndicator;
 
 			public static readonly SizeF DefaultSize;
 
@@ -44,15 +45,33 @@ namespace Cassette
 			public CoverCell (IntPtr handle) : base (handle)
 			{
 				Frame = new RectangleF (PointF.Empty, DefaultSize);
+
 				ImageView = new UIImageView (Frame);
-				ContentView.Add (ImageView);
+
+				ActivityIndicator = new UIActivityIndicatorView (UIActivityIndicatorViewStyle.WhiteLarge) {
+					Center = Frame.Center (),
+					HidesWhenStopped = true,
+					AutoresizingMask = UIViewAutoresizing.FlexibleMargins
+				};
+
+				ContentView.AddSubviews (
+					ImageView,
+					ActivityIndicator
+				);
 			}
 
 			public Cover Cover {
 				get { return cover; }
 				set {
 					cover = value;
-					ImageView.Image = cover.CoverImage;
+					ActivityIndicator.StartAnimating ();
+					cover.GetCoverImageAsync ().Continue (task => {
+						ActivityIndicator.StopAnimating ();
+						ImageView.Image = task.Result;
+
+						ImageView.Alpha = 0;
+						UIView.Animate (0.5, () => ImageView.Alpha = 1);
+					});
 				}
 			}
 		}
