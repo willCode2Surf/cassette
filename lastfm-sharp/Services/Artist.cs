@@ -144,7 +144,7 @@ namespace Lastfm.Services
 		{
 			XmlDocument doc = request("artist.getInfo");
 			
-			string[] sizes = extractAll(doc, "image", 3);
+			string[] sizes = extractAll(doc, "image", (int)ImageSize.Mega + 1);
 			
 			return sizes[(int)size];
 		}
@@ -157,7 +157,7 @@ namespace Lastfm.Services
 		/// </returns>
 		public string GetImageURL()
 		{
-			return GetImageURL(ImageSize.Large);
+			return GetImageURL(ImageSize.Mega);
 		}
 		
 		/// <summary>
