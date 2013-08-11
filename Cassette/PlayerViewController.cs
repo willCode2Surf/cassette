@@ -43,7 +43,7 @@ namespace Cassette
 			playButton.TouchUpInside += (sender, e) => 
 			{
 				if (Tracks.Count > 0)
-					RdioHelper.Instance.PlaySource(Tracks[0]);
+					RdioClient.SharedClient.PlaySource(Tracks[0]);
 			};
 
 

@@ -29,10 +29,10 @@ namespace Cassette
 
 			View.AddSubview (CoverCollection);
 
-			RdioHelper.AuthorizeRequestCompleted += (RdioHelper.AuthorizeState state) => {
-				if (state == RdioHelper.AuthorizeState.Authorized) {
-					RdioHelper.GetHeavyRotationCoversCompleted += HandleGetHeavyRotationCoversCompleted;
-					RdioHelper.Instance.GetHeavyRotationCovers ();
+			RdioClient.SharedClient.AuthorizeRequestCompleted += (state) => {
+				if (state == AuthorizeState.Authorized) {
+					RdioClient.SharedClient.GetHeavyRotationCoversCompleted += HandleGetHeavyRotationCoversCompleted;
+					RdioClient.SharedClient.GetHeavyRotationCovers (start: 0, count: 50);
 				}
 			};
 		}
@@ -47,7 +47,7 @@ namespace Cassette
 
 		void HandleGetHeavyRotationCoversCompleted (List<Cover> covers)
 		{
-			RdioHelper.GetHeavyRotationCoversCompleted -= HandleGetHeavyRotationCoversCompleted;
+			RdioClient.SharedClient.GetHeavyRotationCoversCompleted -= HandleGetHeavyRotationCoversCompleted;
 			CoverCollection.DataSource = new CoverCollectionView.CoverDataSource (covers);
 		}
 	}

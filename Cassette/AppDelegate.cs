@@ -22,8 +22,9 @@ namespace Cassette
 			};
 			window.MakeKeyAndVisible ();
 
-			this.window.RootViewController.PresentViewController (new LoginScreenController (), false, () => {});
-			
+			var loginScreenController = new LoginScreenController (UIScreen.MainScreen.Bounds);
+			window.RootViewController.PresentViewController (loginScreenController, false, delegate{});
+
 			return true;
 		}
 	}
