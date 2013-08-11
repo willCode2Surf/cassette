@@ -27,6 +27,7 @@ namespace Cassette
 			Delegate = @delegate;
 
 			@delegate.CoverCellSelected += (cover, view) => CoverTapped (cover, view);
+			BackgroundColor = UIColor.FromPatternImage (UIImage.FromFile ("purple.png"));
 		}
 
 		class CoverCell : UICollectionViewCell
