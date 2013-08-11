@@ -28,8 +28,6 @@ namespace Cassette
 		Rdio rdio;
 		RdioDelegate rdioDelegate;
 
-		List<AsyncRequestHandler> handlers = new List<AsyncRequestHandler> ();
-
 		AuthorizeState authorizeState = AuthorizeState.Unknown;
 
 		public AuthorizeState AuthorizeState { 
