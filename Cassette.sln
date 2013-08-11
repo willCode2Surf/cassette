@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.Juice.iOS", "Xamari
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RdioSdk.iOS", "RdioSdk.iOS\RdioSdk.iOS.csproj", "{63C4C16A-8952-4F57-9DAA-1ED94FB44DDE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lastfm-sharp", "lastfm-sharp\lastfm-sharp.csproj", "{3100A8A4-F045-4DB3-B00D-CB32B065DC15}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|iPhoneSimulator = Debug|iPhoneSimulator
@@ -43,6 +45,18 @@ Global
 		{2306E27C-874B-4229-8831-FF905BC2465E}.Release|iPhone.Build.0 = Release|iPhone
 		{2306E27C-874B-4229-8831-FF905BC2465E}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
 		{2306E27C-874B-4229-8831-FF905BC2465E}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{3100A8A4-F045-4DB3-B00D-CB32B065DC15}.Ad-Hoc|iPhone.ActiveCfg = Release|Any CPU
+		{3100A8A4-F045-4DB3-B00D-CB32B065DC15}.Ad-Hoc|iPhone.Build.0 = Release|Any CPU
+		{3100A8A4-F045-4DB3-B00D-CB32B065DC15}.AppStore|iPhone.ActiveCfg = Release|Any CPU
+		{3100A8A4-F045-4DB3-B00D-CB32B065DC15}.AppStore|iPhone.Build.0 = Release|Any CPU
+		{3100A8A4-F045-4DB3-B00D-CB32B065DC15}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{3100A8A4-F045-4DB3-B00D-CB32B065DC15}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{3100A8A4-F045-4DB3-B00D-CB32B065DC15}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{3100A8A4-F045-4DB3-B00D-CB32B065DC15}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{3100A8A4-F045-4DB3-B00D-CB32B065DC15}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{3100A8A4-F045-4DB3-B00D-CB32B065DC15}.Release|iPhone.Build.0 = Release|Any CPU
+		{3100A8A4-F045-4DB3-B00D-CB32B065DC15}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{3100A8A4-F045-4DB3-B00D-CB32B065DC15}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{63C4C16A-8952-4F57-9DAA-1ED94FB44DDE}.Ad-Hoc|iPhone.ActiveCfg = Release|Any CPU
 		{63C4C16A-8952-4F57-9DAA-1ED94FB44DDE}.Ad-Hoc|iPhone.Build.0 = Release|Any CPU
 		{63C4C16A-8952-4F57-9DAA-1ED94FB44DDE}.AppStore|iPhone.ActiveCfg = Release|Any CPU

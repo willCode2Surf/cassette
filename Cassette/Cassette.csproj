@@ -146,5 +146,9 @@
       <Project>{63C4C16A-8952-4F57-9DAA-1ED94FB44DDE}</Project>
       <Name>RdioSdk.iOS</Name>
     </ProjectReference>
+    <ProjectReference Include="..\lastfm-sharp\lastfm-sharp.csproj">
+      <Project>{3100A8A4-F045-4DB3-B00D-CB32B065DC15}</Project>
+      <Name>lastfm-sharp</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
