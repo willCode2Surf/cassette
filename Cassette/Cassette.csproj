@@ -98,9 +98,9 @@
     <Compile Include="ContentController.cs" />
     <Compile Include="BigCoverView.cs" />
     <Compile Include="PlayerViewController.cs" />
-    <Compile Include="RdioHelper.cs" />
     <Compile Include="LoginScreenController.cs" />
     <Compile Include="TopLevelController.cs" />
+    <Compile Include="RdioClient.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
