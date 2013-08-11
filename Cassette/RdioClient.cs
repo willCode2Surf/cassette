@@ -5,6 +5,7 @@ using MonoTouch.Foundation;
 using MonoTouch.UIKit; 
 
 using RdioSdk.iOS;
+using System.Threading.Tasks;
 
 namespace Cassette
 {
@@ -20,15 +21,14 @@ namespace Cassette
 	public sealed class RdioClient
 	{
 		public event Action<AuthorizeState> AuthorizeRequestCompleted = delegate{};
-		public event Action<List<Cover>> GetHeavyRotationCoversCompleted = delegate{};
-
-		RequestHandler heavyRotationHandler;
 
 		static readonly RdioClient sharedClient = new RdioClient ();
 		const string AccessTokenDefaultName = "rdioAccessToken";
 
 		Rdio rdio;
 		RdioDelegate rdioDelegate;
+
+		List<AsyncRequestHandler> handlers = new List<AsyncRequestHandler> ();
 
 		AuthorizeState authorizeState = AuthorizeState.Unknown;
 
@@ -50,11 +50,9 @@ namespace Cassette
 			};
 
 			rdio = new Rdio ("45uk6pq7vbxdb2zunug9r7mu", "Vbe54ghj2N", rdioDelegate);
-
-			heavyRotationHandler = new RequestHandler (ProcessHeavyRotationData);
 		}
 
-		void ProcessHeavyRotationData (NSObject data)
+		List<Cover> ProcessHeavyRotationData (NSObject data)
 		{
 			var covers = new List<Cover> ();
 			var results = data as NSMutableArray;
@@ -77,7 +75,8 @@ namespace Cassette
 					}
 				}
 			}
-			GetHeavyRotationCoversCompleted (covers);
+
+			return covers;
 		}
 
 		public static RdioClient SharedClient {
@@ -109,7 +108,7 @@ namespace Cassette
 			rdio.RdioPlayer.PlaySource (src);
 		}
 
-		public void GetHeavyRotationCovers (int start = 0, int count = 12)
+		public async Task<List<Cover>> GetHeavyRotationCovers (int start = 0, int count = 12)
 		{
 			var values = new [] {
 				rdio.User [(NSString) "key"],
@@ -132,30 +131,8 @@ namespace Cassette
 			};
 
 			var args = NSDictionary.FromObjectsAndKeys (values, keys);
-
-			rdio.CallApiMethod ("getHeavyRotation", args, heavyRotationHandler);
-		}
-
-		class RequestHandler : RequestDelegateHandlers
-		{
-			readonly Action<NSObject> LoadedData;
-			readonly Action<NSError> Failed;
-
-			public RequestHandler (Action<NSObject> loadedData, Action<NSError> failed = null) 
-			{
-				LoadedData = loadedData;
-				Failed = failed ?? Console.Error.WriteLine;
-			}
-
-			public override void DidLoadData (Request request, NSObject data)
-			{
-				LoadedData (data);
-			}
-
-			public override void DidFail (Request request, NSError error)
-			{
-				Failed (error);
-			}
+			var data = await rdio.CallApiMethodAsync ("getHeavyRotation", args);
+			return ProcessHeavyRotationData (data);
 		}
 
 		class RdioDelegate : RdioSdk.iOS.RdioDelegate
@@ -183,6 +160,40 @@ namespace Cassette
 			{
 				RequestComplete (AuthorizeState.LoggedOut);
 			}
+		}
+	}
+
+	class AsyncRequestHandler : RequestDelegateHandlers
+	{
+		TaskCompletionSource<NSObject> LoadedData = new TaskCompletionSource<NSObject> ();
+
+		public Task<NSObject> Data {
+			get { return LoadedData.Task; }
+		}
+
+		public override void DidLoadData (Request request, NSObject data)
+		{
+			LoadedData.SetResult (data);
+		}
+	}
+
+	static class RdioSDKExtensions
+	{
+		// We keep temporary references to handlers due to a GC issue
+		static List<AsyncRequestHandler> Handlers = new List<AsyncRequestHandler> ();
+
+		public static async Task<NSObject> CallApiMethodAsync (this Rdio rdio, string method, NSDictionary parameters)
+		{
+			var handler = new AsyncRequestHandler ();
+
+			Handlers.Add (handler);
+
+			rdio.CallApiMethod (method, parameters, handler);
+			var data = await handler.Data;
+
+			Handlers.Remove (handler);
+
+			return data;
 		}
 	}
 }
