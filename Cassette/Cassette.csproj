@@ -106,7 +106,6 @@
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Resources\covers\" />
-    <Folder Include="Resources\destination\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Default-568h%402x.png" />
