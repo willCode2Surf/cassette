@@ -20,7 +20,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Web;
+using System.Net;
 using System.Text;
 
 namespace Lastfm
@@ -31,8 +31,8 @@ namespace Lastfm
 		{
 			string values = "";
 			foreach(string key in this.Keys)
-				values += HttpUtility.UrlEncode(key) + "=" +
-					HttpUtility.UrlEncode(this[key]) + "&";
+				values += Uri.EscapeDataString(key) + "=" +
+					Uri.EscapeDataString(this[key]) + "&";
 			values = values.Substring(0, values.Length - 1);
 			
 			return values;

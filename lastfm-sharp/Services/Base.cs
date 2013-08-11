@@ -21,7 +21,6 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
-using System.Web;
 
 namespace Lastfm.Services
 {
@@ -118,7 +117,7 @@ namespace Lastfm.Services
 		
 		internal string urlSafe(string text)
 		{
-			return HttpUtility.UrlEncode(HttpUtility.UrlEncode(text));
+			return Uri.EscapeDataString(Uri.EscapeDataString(text));
 		}
 		
 		internal string getPeriod(Period period)

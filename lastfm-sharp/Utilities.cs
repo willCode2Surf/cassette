@@ -24,7 +24,6 @@ using System.Collections.Specialized;
 using System.Text;
 using System.Security.Cryptography;
 using System.Net;
-using System.Web;
 using Lastfm.Services;
 
 namespace Lastfm
