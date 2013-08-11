@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using MonoTouch.Foundation;
@@ -60,18 +61,33 @@ namespace Cassette
 				);
 			}
 
+			async void BeginLoadCoverImage ()
+			{
+				ImageView.Alpha = 0;
+
+				ActivityIndicator.StartAnimating ();
+				ImageView.Image = await cover.GetCoverImageAsync ();
+				ActivityIndicator.StopAnimating ();
+
+				UIView.Animate (0.5, () => ImageView.Alpha = 1);
+			}
+
 			public Cover Cover {
 				get { return cover; }
 				set {
 					cover = value;
-					ActivityIndicator.StartAnimating ();
-					cover.GetCoverImageAsync ().Continue (task => {
-						ActivityIndicator.StopAnimating ();
-						ImageView.Image = task.Result;
 
-						ImageView.Alpha = 0;
-						UIView.Animate (0.5, () => ImageView.Alpha = 1);
-					});
+					switch (cover.CoverImageStatus) {
+					case TaskStatus.Created:
+						BeginLoadCoverImage ();
+						break;
+					case TaskStatus.RanToCompletion:
+						ImageView.Image = cover.CoverImage;
+						break;
+					default:
+						// Do nothing.
+						break;
+					}
 				}
 			}
 		}
@@ -104,7 +120,7 @@ namespace Cassette
 
 		public class CoverDataSource : UICollectionViewDataSource
 		{
-			const int TotalCovers = 12;
+			const int TotalCovers = 24;
 
 			//List<Cover> Covers =
 			//	Enumerable
@@ -123,9 +139,9 @@ namespace Cassette
 				return Covers.Count;
 			}
 
-			public override UICollectionViewCell GetCell (UICollectionView collectionView, NSIndexPath path)
+			public override UICollectionViewCell GetCell (UICollectionView view, NSIndexPath path)
 			{
-				var cell = (CoverCell) collectionView.DequeueReusableCell (CoverCellId, path);
+				var cell = (CoverCell) view.DequeueReusableCell (CoverCellId, path);
 				cell.Cover = Covers [path.Row];
 				return cell;
 			}

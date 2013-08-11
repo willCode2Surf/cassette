@@ -11,12 +11,12 @@ using Xamarin.Juice;
 
 namespace Cassette
 {
-
 	public class Cover
 	{
 		public readonly string ImageUrl;
 
 		UIImage _coverImage;
+		Task<UIImage> _coverImageTask;
 
 		/// <summary>
 		/// Gets the cover image. This blocks if the image isn't downloaded yet; please use GetCoverImageAsync.
@@ -37,11 +37,20 @@ namespace Cassette
 			ImageUrl = imageUrl;
 			Artist = artist;
 			Tracks = tracks;
+
+			_coverImageTask = new Task<UIImage> (() => CoverImage);
+		}
+
+		public TaskStatus CoverImageStatus {
+			get { return _coverImageTask.Status; }
 		}
 
 		public Task<UIImage> GetCoverImageAsync ()
 		{
-			return Task.Factory.StartNew (() => CoverImage);
+			if (_coverImageTask.Status == TaskStatus.Created)
+				_coverImageTask.Start ();
+
+			return _coverImageTask;
 		}
 
 	 	UIImage FromUrl (string uri)
