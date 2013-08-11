@@ -17,7 +17,9 @@ namespace Cassette
 
 		public ContentController (RectangleF frame)
 		{
-			View = new UIView (frame);
+			View = new UIView (frame) {
+				BackgroundColor = UIColor.FromPatternImage (UIImage.FromFile ("purple.png"))
+			};
 
 			PlayerViewController = new PlayerViewController (frame);
 			PlayerViewController.Dismissed += () => {
@@ -26,7 +28,6 @@ namespace Cassette
 
 			CoverCollection = new CoverCollectionView (frame);
 			CoverCollection.CoverTapped += CoverCollectionCoverTapped;
-
 			View.AddSubview (CoverCollection);
 
 			RdioClient.SharedClient.AuthorizeRequestCompleted += (state) => {
