@@ -25,5 +25,9 @@
 	<string>Cassette</string>
 	<key>CFBundleIdentifier</key>
 	<string>Cassette</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
 </dict>
 </plist>

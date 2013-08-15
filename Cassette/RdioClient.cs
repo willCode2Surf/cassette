@@ -27,6 +27,7 @@ namespace Cassette
 
 		Rdio rdio;
 		RdioDelegate rdioDelegate;
+		CurrentTrackObserver observer;
 
 		AuthorizeState authorizeState = AuthorizeState.Unknown;
 
@@ -48,6 +49,9 @@ namespace Cassette
 			};
 
 			rdio = new Rdio ("45uk6pq7vbxdb2zunug9r7mu", "Vbe54ghj2N", rdioDelegate);
+
+			observer = new CurrentTrackObserver();
+			rdio.RdioPlayer.AddObserver(observer, (NSString)"currentTrack", NSKeyValueObservingOptions.New, context: IntPtr.Zero);
 		}
 
 		List<Cover> ProcessHeavyRotationData (NSObject data)
@@ -172,6 +176,35 @@ namespace Cassette
 		public override void DidLoadData (Request request, NSObject data)
 		{
 			LoadedData.SetResult (data);
+		}
+	}
+
+ 	class CurrentTrackObserver : NSObject
+	{
+		int bgTaskId;
+
+		public override void ObserveValue(NSString keyPath, NSObject ofObject, NSDictionary change, IntPtr context)
+		{
+			if (keyPath == "currentTrack") {
+
+				int newTaskId = 0;
+				string newKey = change.ObjectForKey ((NSString)ChangeNewKey).ToString ();
+				Console.WriteLine ("Received current track notification: " + newKey);
+
+				newTaskId = UIApplication.SharedApplication.BeginBackgroundTask (delegate {});
+
+				if (newTaskId != 0) {
+					Console.WriteLine ("currentTrack: Started new task: " + newTaskId);
+				}
+
+				if (bgTaskId != 0) {
+					UIApplication.SharedApplication.EndBackgroundTask (bgTaskId);
+					Console.WriteLine ("currentTracak: Ended Background task: " + bgTaskId);
+					bgTaskId = 0;
+				}
+
+				bgTaskId = newTaskId;
+			}
 		}
 	}
 
